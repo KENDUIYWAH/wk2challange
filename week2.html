@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #ce3636;
+            cursor: pointer;
+        }
+        .purchased {
+            text-decoration: line-through;
+            background-color: #7c3434;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shopping List</h1>
+    <input type="text" id="itemInput" placeholder="Add an item">
+    <button id="addItemBtn">Add</button>
+    <button id="clearListBtn">Clear List</button>
+    <ul id="shoppingList"></ul>
+
+    <script>
+        let shoppingList = [];
+        shoppingList.push({ name: 'cooking oil', purchased: false });
+        const itemInput = document.getElementById('itemInput');
+        const addItemBtn = document.getElementById('addItemBtn');
+        const clearListBtn = document.getElementById('clearListBtn');
+        const shoppingListContainer = document.getElementById('shoppingList');
+        function renderList() {
+        
+            shoppingListContainer.innerHTML = '';
+            shoppingList.forEach((item, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = item.name
+                if (item.purchased) {
+                    listItem.classList.add('purchased');
+                }
+                listItem.addEventListener('click', () => {
+                    item.purchased = !item.purchased;
+                    renderList();
+                });
+                listItem.addEventListener('dblclick', () => {
+                    const newName = prompt('Edit item:', item.name);
+                    if (newName) {
+                        item.name = newName;
+                        renderList();
+                    }
+                });
+
+                shoppingListContainer.appendChild(listItem);
+            });
+            localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
+        }
+        function addItem() {
+            const itemName = itemInput.value.trim();
+            if (itemName) {
+                shoppingList.push({ name: itemName, purchased: false });
+                itemInput.value = '';
+                renderList();
+            }
+        }
+        function clearList() {
+            shoppingList = [];
+            renderList();
+        }
+
+        addItemBtn.addEventListener('click', addItem);
+        clearListBtn.addEventListener('click', clearList);
+        window.addEventListener('load', () => {
+            const savedList = localStorage.getItem('shoppingList');
+            if (savedList) {
+                shoppingList = JSON.parse(savedList);
+            }
+            renderList();
+        }
+        renderList();
+    </script>
+</body>
+</html>
+
+
+
