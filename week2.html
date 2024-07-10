@@ -3,100 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping List</title>
+    <title>Interactive Shopping List</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 20px;
+            margin: 20px;
+            background-color: #f0f8ff; /* Light blue background */
         }
         h1 {
-            color: #333;
+            font-size: 24px;
         }
         input, button {
             padding: 10px;
             margin: 5px;
+            border: 1px solid #d11333;
+            border-radius: 4px;
         }
-        ul {
+        button {
+            background-color: #0db2e4;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #fa4e19;
+        }
+        #shoppingList {
             list-style-type: none;
             padding: 0;
         }
-        li {
+        #shoppingList li {
             padding: 10px;
+            border: 1px solid #d82d2d;
             margin: 5px 0;
-            background: #ce3636;
-            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #8bc72a;
+            border-radius: 4px;
         }
         .purchased {
             text-decoration: line-through;
-            background-color: #7c3434;
+            background-color: #6b0e0e;
         }
     </style>
 </head>
 <body>
     <h1>Shopping List</h1>
-    <input type="text" id="itemInput" placeholder="Add an item">
-    <button id="addItemBtn">Add</button>
-    <button id="clearListBtn">Clear List</button>
+    <input type="text" id="itemInput" placeholder="Add a new item">
+    <button id="addItemButton">Add</button>
+    <button id="clearListButton">Clear List</button>
     <ul id="shoppingList"></ul>
 
     <script>
-        let shoppingList = [];
-        shoppingList.push({ name: 'cooking oil', purchased: false });
-        const itemInput = document.getElementById('itemInput');
-        const addItemBtn = document.getElementById('addItemBtn');
-        const clearListBtn = document.getElementById('clearListBtn');
-        const shoppingListContainer = document.getElementById('shoppingList');
-        function renderList() {
-        
-            shoppingListContainer.innerHTML = '';
-            shoppingList.forEach((item, index) => {
-                const listItem = document.createElement('li');
-                listItem.textContent = item.name
-                if (item.purchased) {
-                    listItem.classList.add('purchased');
-                }
-                listItem.addEventListener('click', () => {
-                    item.purchased = !item.purchased;
-                    renderList();
-                });
-                listItem.addEventListener('dblclick', () => {
-                    const newName = prompt('Edit item:', item.name);
-                    if (newName) {
-                        item.name = newName;
-                        renderList();
-                    }
-                });
+        document.addEventListener('DOMContentLoaded', () => {
+            let shoppingList = JSON.parse(localStorage.getItem('shoppingList')) || [];
 
-                shoppingListContainer.appendChild(listItem);
-            });
-            localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
-        }
-        function addItem() {
-            const itemName = itemInput.value.trim();
-            if (itemName) {
-                shoppingList.push({ name: itemName, purchased: false });
-                itemInput.value = '';
+            const itemInput = document.getElementById('itemInput');
+            const addItemButton = document.getElementById('addItemButton');
+            const clearListButton = document.getElementById('clearListButton');
+            const shoppingListContainer = document.getElementById('shoppingList');
+
+            const renderList = () => {
+                shoppingListContainer.innerHTML = '';
+                shoppingList.forEach((item, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = item.text;
+                    listItem.className = item.purchased ? 'purchased' : '';
+
+                    const purchaseButton = document.createElement('button');
+                    purchaseButton.textContent = item.purchased ? 'Unmark' : 'Purchase';
+                    purchaseButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        item.purchased = !item.purchased;
+                        saveAndRender();
+                    });
+
+                    listItem.appendChild(purchaseButton);
+                    shoppingListContainer.appendChild(listItem);
+                });
+            };
+
+            const saveAndRender = () => {
+                localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
                 renderList();
-            }
-        }
-        function clearList() {
-            shoppingList = [];
-            renderList();
-        }
+            };
 
-        addItemBtn.addEventListener('click', addItem);
-        clearListBtn.addEventListener('click', clearList);
-        window.addEventListener('load', () => {
-            const savedList = localStorage.getItem('shoppingList');
-            if (savedList) {
-                shoppingList = JSON.parse(savedList);
-            }
+            addItemButton.addEventListener('click', () => {
+                const itemText = itemInput.value.trim();
+                if (itemText !== '') {
+                    shoppingList.push({ text: itemText, purchased: false });
+                    itemInput.value = '';
+                    saveAndRender();
+                }
+            });
+
+            clearListButton.addEventListener('click', () => {
+                shoppingList = [];
+                saveAndRender();
+            });
+
             renderList();
-        }
-        renderList();
+        });
     </script>
 </body>
 </html>
-
-
-
