@@ -4,105 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Shopping List</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f0f8ff; /* Light blue background */
-        }
-        h1 {
-            font-size: 24px;
-        }
-        input, button {
-            padding: 10px;
-            margin: 5px;
-            border: 1px solid #d11333;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #0db2e4;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #fa4e19;
-        }
-        #shoppingList {
-            list-style-type: none;
-            padding: 0;
-        }
-        #shoppingList li {
-            padding: 10px;
-            border: 1px solid #d82d2d;
-            margin: 5px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #8bc72a;
-            border-radius: 4px;
-        }
-        .purchased {
-            text-decoration: line-through;
-            background-color: #6b0e0e;
-        }
-    </style>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <h1>Shopping List</h1>
-    <input type="text" id="itemInput" placeholder="Add a new item">
-    <button id="addItemButton">Add</button>
-    <button id="clearListButton">Clear List</button>
-    <ul id="shoppingList"></ul>
+    <div class="container">
+       <marquee><h1>Shopping List</h1></marquee>
+        <div class="input-container">
+            <input type="text" id="item-input" placeholder="Enter item">
+            <button id="add-btn">Add</button>
+        </div>
+        <ul id="shopping-list"></ul>
+        <button id="clear-btn">Clear List</button>
+    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            let shoppingList = JSON.parse(localStorage.getItem('shoppingList')) || [];
-
-            const itemInput = document.getElementById('itemInput');
-            const addItemButton = document.getElementById('addItemButton');
-            const clearListButton = document.getElementById('clearListButton');
-            const shoppingListContainer = document.getElementById('shoppingList');
-
-            const renderList = () => {
-                shoppingListContainer.innerHTML = '';
-                shoppingList.forEach((item, index) => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = item.text;
-                    listItem.className = item.purchased ? 'purchased' : '';
-
-                    const purchaseButton = document.createElement('button');
-                    purchaseButton.textContent = item.purchased ? 'Unmark' : 'Purchase';
-                    purchaseButton.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        item.purchased = !item.purchased;
-                        saveAndRender();
-                    });
-
-                    listItem.appendChild(purchaseButton);
-                    shoppingListContainer.appendChild(listItem);
-                });
-            };
-
-            const saveAndRender = () => {
-                localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
-                renderList();
-            };
-
-            addItemButton.addEventListener('click', () => {
-                const itemText = itemInput.value.trim();
-                if (itemText !== '') {
-                    shoppingList.push({ text: itemText, purchased: false });
-                    itemInput.value = '';
-                    saveAndRender();
-                }
-            });
-
-            clearListButton.addEventListener('click', () => {
-                shoppingList = [];
-                saveAndRender();
-            });
-
-            renderList();
-        });
-    </script>
+    <script src="./index.js"></script>
 </body>
 </html>

@@ -1,0 +1,88 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #0fb1a9;
+}
+
+.container {
+  background-color: rgb(68, 50, 233);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.input-container {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+input {
+  flex-grow: 1;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ca1414;
+  border-radius: 4px 0 0 4px;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #4CAF50;
+  color: rgb(226, 240, 29);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#add-btn {
+  border-radius: 0 4px 4px 0;
+}
+
+#clear-btn {
+  width: 100%;
+  margin-top: 1rem;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #32e032;
+  border: 1px solid #d62828;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+}
+
+li.purchased {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  margin-left: 0.5rem;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
